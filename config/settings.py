@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "rest_framework_simplejwt",
     "django_filters",
+    "phonenumber_field",
     "corsheaders",
     "employees",
     "tasks",
@@ -64,9 +65,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
-
-
-
 
 DATABASES = {
     "default": {
