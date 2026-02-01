@@ -1,8 +1,7 @@
-from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
-from employees.models import Employee
 from tasks.models import Task
+from tasks.validators import DeadlineValidator
 
 
 class TasksSerializer(ModelSerializer):
@@ -24,4 +23,8 @@ class TasksSerializer(ModelSerializer):
             "assignee",
             "deadline",
             "priority",
+        ]
+
+        validators = [
+            DeadlineValidator(field="deadline"),
         ]

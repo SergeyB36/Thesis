@@ -48,21 +48,21 @@ class TaskListAPIView(ListAPIView):
 
 
 class TaskRetrieveAPIView(RetrieveAPIView):
-    """"""
+    """Просмотр задачи"""
 
     queryset = Task.objects.all()
     serializer_class = TasksSerializer
 
 
 class TaskDestroyAPIView(DestroyAPIView):
-    """Удаление задачи"""
+    """Удаление задачи. Возможно только с выполненными задачами"""
 
-    queryset = Task.objects.all()
+    queryset = Task.objects.filter(status=Task.Status.DONE)
     serializer_class = TasksSerializer
 
 
 class TaskUpdateAPIView(UpdateAPIView):
-    """"""
+    """Обновление задачи"""
 
     queryset = Task.objects.all()
     serializer_class = TasksSerializer
