@@ -1,10 +1,15 @@
 from django.conf.urls.static import static
 from django.urls import path
-from rest_framework.routers import SimpleRouter
 
 from config import settings
 from tasks.apps import TasksConfig
-from tasks.views import TaskCreateAPIView, TaskListAPIView, TaskDestroyAPIView, TaskRetrieveAPIView, TaskUpdateAPIView
+from tasks.views import (
+    TaskCreateAPIView,
+    TaskDestroyAPIView,
+    TaskListAPIView,
+    TaskRetrieveAPIView,
+    TaskUpdateAPIView,
+)
 
 app_name = TasksConfig.name
 

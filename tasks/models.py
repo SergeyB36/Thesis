@@ -7,90 +7,64 @@ class Task(models.Model):
     """Модель задачи"""
 
     class Status(models.TextChoices):
-        TODO = 'todo', 'К выполнению'
-        IN_PROGRESS = 'in_progress', 'В работе'
-        REVIEW = 'review', 'На проверке'
-        DONE = 'done', 'Выполнено'
-        CANCELLED = 'cancelled', 'Отменено'
+        TODO = "todo", "К выполнению"
+        IN_PROGRESS = "in_progress", "В работе"
+        REVIEW = "review", "На проверке"
+        DONE = "done", "Выполнено"
+        CANCELLED = "cancelled", "Отменено"
 
     class Priority(models.TextChoices):
-        LOW = 'low', 'Низкий'
-        MEDIUM = 'medium', 'Средний'
-        HIGH = 'high', 'Высокий'
-        CRITICAL = 'critical', 'Критический'
+        LOW = "low", "Низкий"
+        MEDIUM = "medium", "Средний"
+        HIGH = "high", "Высокий"
+        CRITICAL = "critical", "Критический"
 
-    title = models.CharField(
-        verbose_name='Наименование задачи',
-        max_length=200,
-        help_text='Краткое описание задачи'
-    )
+    title = models.CharField(verbose_name="Наименование задачи", max_length=200, help_text="Краткое описание задачи")
 
     description = models.TextField(
-        verbose_name='Описание задачи',
-        blank=True,
-        null=True,
-        help_text='Подробное описание задачи'
+        verbose_name="Описание задачи", blank=True, null=True, help_text="Подробное описание задачи"
     )
 
     parent_task = models.ForeignKey(
-        'self',
-        verbose_name='Родительская задача',
+        "self",
+        verbose_name="Родительская задача",
         on_delete=models.CASCADE,
-        related_name='subtasks',
+        related_name="subtasks",
         blank=True,
         null=True,
-        help_text='Задача, от которой зависит текущая'
+        help_text="Задача, от которой зависит текущая",
     )
 
     assignee = models.ForeignKey(
         Employee,
-        verbose_name='Исполнитель',
+        verbose_name="Исполнитель",
         on_delete=models.SET_NULL,
-        related_name='tasks',
+        related_name="tasks",
         blank=True,
         null=True,
-        help_text='Сотрудник, ответственный за выполнение задачи'
+        help_text="Сотрудник, ответственный за выполнение задачи",
     )
 
     deadline = models.DateField(
-        verbose_name='Срок выполнения',
-        help_text='Дата, к которой задача должна быть выполнена'
+        verbose_name="Срок выполнения", help_text="Дата, к которой задача должна быть выполнена"
     )
 
-    status = models.CharField(
-        verbose_name='Статус',
-        max_length=20,
-        choices=Status.choices,
-        default=Status.TODO
-    )
+    status = models.CharField(verbose_name="Статус", max_length=20, choices=Status.choices, default=Status.TODO)
 
     priority = models.CharField(
-        verbose_name='Приоритет',
-        max_length=20,
-        choices=Priority.choices,
-        default=Priority.MEDIUM
+        verbose_name="Приоритет", max_length=20, choices=Priority.choices, default=Priority.MEDIUM
     )
 
-    created_at = models.DateTimeField(
-        verbose_name='Дата создания',
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
 
-    updated_at = models.DateTimeField(
-        verbose_name='Дата обновления',
-        auto_now=True
-    )
+    updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
 
-    completed_at = models.DateTimeField(
-        verbose_name='Дата завершения',
-        blank=True,
-        null=True
-    )
+    completed_at = models.DateTimeField(verbose_name="Дата завершения", blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Задача'
-        verbose_name_plural = 'Задачи'
-        ordering = ['-created_at']
+        verbose_name = "Задача"
+        verbose_name_plural = "Задачи"
+        ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.title} ({self.get_status_display()})"
+        return f"{self.title}, {self.deadline}, {self.assignee}"

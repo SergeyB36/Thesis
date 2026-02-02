@@ -1,8 +1,8 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -78,8 +78,8 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
-    "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    "DATE_FORMAT": "%Y-%m-%d",
+    "DATETIME_FORMAT": "%d-%m-%Y %H:%M:%S",
+    "DATE_FORMAT": "%d-%m-%Y",
     "TIME_FORMAT": "%H:%M",
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": [
@@ -137,4 +137,3 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-

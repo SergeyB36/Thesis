@@ -1,10 +1,8 @@
-from django.db import models
-
 from employees.models import Employee
 from tasks.models import Task
 
 
-def get_possible_assignees(self):
+def get_possible_assignees():
     """
     Получение возможных исполнителей для задачи
     Используется для эндпоинта важных задач
@@ -30,8 +28,20 @@ def get_possible_assignees(self):
 
     return possible_assignees
 
-def comlete_task(task_id):
+
+def complete_task(task_id):
     """Функция изменения задачи после выполнения"""
     task = Task.objects.get(id=task_id)
     task.status = Task.Status.DONE
+    task.save()
+
+
+def get_critical_tasks():
+    return Task.objects.filter(priority=Task.Priority.CRITICAL)
+
+
+def get_tesk_to_work(user_id, task_id):
+    task = Task.objects.get(id=task_id)
+    task.assignee = Employee.objects.get(id=user_id)
+    task.status = Task.Status.IN_PROGRESS
     task.save()

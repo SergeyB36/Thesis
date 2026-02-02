@@ -1,4 +1,4 @@
-from django.db.models import When, IntegerField, Case
+from django.db.models import Case, IntegerField, When
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import (
     CreateAPIView,
@@ -17,9 +17,6 @@ class TaskCreateAPIView(CreateAPIView):
 
     queryset = Task.objects.all()
     serializer_class = TasksSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(header=self.request.user)
 
 
 class TaskListAPIView(ListAPIView):
