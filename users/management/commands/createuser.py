@@ -7,7 +7,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user = CustomUser.objects.create(email="user@user.com")
-        user.nickname = "user"
+        user.fullname = "user"
         user.set_password("1234")
         user.save()
         self.stdout.write(self.style.SUCCESS(f"Пользователь {user} успешно создан"))

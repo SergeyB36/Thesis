@@ -1,5 +1,7 @@
+import datetime
+
+from django.core.exceptions import ValidationError
 from django.utils import timezone
-from rest_framework.exceptions import ValidationError
 
 
 class DeadlineValidator:
@@ -12,7 +14,13 @@ class DeadlineValidator:
         validated_value = value.get(self.field)
         if validated_value:
             now = timezone.now().date()
-            deadline_date = validated_value.date()
+            if isinstance(validated_value, datetime.datetime):
+                deadline_date = validated_value.date()
+            elif isinstance(validated_value, datetime.date):
+                deadline_date = validated_value
+            else:
+                raise ValidationError("Неверный формат даты дедлайна")
+
             if deadline_date > now:
                 return
             else:

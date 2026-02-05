@@ -1,5 +1,6 @@
+from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 
 from employees.models import Employee
 from tasks.serializers import TasksSerializer
@@ -38,3 +39,8 @@ class EmployeeSerializer(ModelSerializer):
     def get_task_count(self, obj):
         """Количество задач сотрудника"""
         return obj.tasks.count()
+
+
+class EmployeeForTask(Serializer):
+    task_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()

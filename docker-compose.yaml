@@ -16,7 +16,6 @@ services:
         condition: service_healthy
     env_file:
       - .env
-
   postgres:
     image: postgres:17
     volumes:

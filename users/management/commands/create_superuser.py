@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user = CustomUser.objects.create(email="admin@user.com")
-        user.nickname = "admin"
+        user.fullname = "admin"
         user.set_password("1234")
         user.is_staff = True
         user.is_superuser = True

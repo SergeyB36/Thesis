@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from employees.models import Employee
@@ -34,7 +35,9 @@ class Task(models.Model):
         null=True,
         help_text="Задача, от которой зависит текущая",
     )
-
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task", verbose_name="Владелец задачи"
+    )
     assignee = models.ForeignKey(
         Employee,
         verbose_name="Исполнитель",
