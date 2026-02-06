@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from employees.models import Employee
 from tasks.models import Task
-from django.urls import reverse
 
 User = get_user_model()
 

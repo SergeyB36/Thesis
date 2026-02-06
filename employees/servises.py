@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Count
 
 from employees.models import Employee
@@ -6,7 +7,8 @@ from tasks.models import Task
 
 def get_possible_assignees(task_id, user_id):
     """Получение возможных исполнителей для задачи"""
-    user = Employee.objects.get(id=user_id)
+    User = get_user_model()
+    user = User.objects.get(id=user_id)
     employees = (
         Employee.objects.filter(is_active=True, header=user)
         .annotate(active_tasks_count=Count("tasks"))

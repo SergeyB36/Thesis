@@ -1,4 +1,3 @@
-from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -23,23 +22,17 @@ class EmployeeViewSet(ModelViewSet):
         return qs
 
     def list(self, request, **kwargs):
-        """Метод получения списка сотрудников. Если assegnee=True, то выводится список потенциальных исполнителей"""
-        assegnee = request.query_params.get("assegnee", "false").lower() == "true"
-        if assegnee:
-            serializer = EmployeeForTask(data=request.data)
+        assignee = request.query_params.get("assignee", "false").lower() == "true"
+        if assignee:
+            serializer = EmployeeForTask(data=request.query_params)
             serializer.is_valid(raise_exception=True)
             task_id = serializer.validated_data["task_id"]
-            employer_id = serializer.validated_data["employer_id"]
-            try:
-                possible_employees = get_possible_assignees(task_id, employer_id)
-            except Employee.DoesNotExist:
-                raise exceptions.ValidationError("Employee not found")
+            possible_employees = get_possible_assignees(task_id, user_id=request.user.id)
             return Response(EmployeeSerializer(possible_employees, many=True).data)
         else:
             queryset = Employee.objects.filter(is_active=True, header=self.request.user)
             serializer = EmployeeSerializer(queryset, many=True)
-
-        return Response(serializer.data)
+            return Response(serializer.data)
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]

@@ -77,6 +77,40 @@ class EmployeeViewSetTest(APITestCase):
             priority=Task.Priority.MEDIUM,
         )
 
+        self.task3 = Task.objects.create(
+            title="Задача 3",
+            deadline=timezone.now().date() + timezone.timedelta(days=7),
+            owner=self.user,
+            parent_task=self.task1,
+            status=Task.Status.IN_PROGRESS,
+            priority=Task.Priority.LOW,
+        )
+
+        self.task4 = Task.objects.create(
+            title="Задача 4",
+            deadline=timezone.now().date() + timezone.timedelta(days=7),
+            owner=self.user,
+            assignee=self.employee,
+            status=Task.Status.IN_PROGRESS,
+            priority=Task.Priority.LOW,
+        )
+        self.task5 = Task.objects.create(
+            title="Задача 5",
+            deadline=timezone.now().date() + timezone.timedelta(days=7),
+            owner=self.user,
+            assignee=self.employee,
+            status=Task.Status.IN_PROGRESS,
+            priority=Task.Priority.LOW,
+        )
+        self.task6 = Task.objects.create(
+            title="Задача 6",
+            deadline=timezone.now().date() + timezone.timedelta(days=7),
+            owner=self.user,
+            assignee=self.employee,
+            status=Task.Status.IN_PROGRESS,
+            priority=Task.Priority.LOW,
+        )
+
         self.url = reverse("employees:employee-list")
 
     def test_list_employees(self):
@@ -105,3 +139,13 @@ class EmployeeViewSetTest(APITestCase):
     def test_list_permission_for_anonymous(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_list_with_assignee_param(self):
+        self.client.force_authenticate(user=self.user)
+        params = {
+            "assignee": "true",
+            "task_id": self.task3.id,
+        }
+        response = self.client.get(self.url, query_params=params)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)

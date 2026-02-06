@@ -43,4 +43,3 @@ class EmployeeSerializer(ModelSerializer):
 
 class EmployeeForTask(Serializer):
     task_id = serializers.IntegerField()
-    user_id = serializers.IntegerField()
