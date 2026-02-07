@@ -119,8 +119,11 @@ class CriticalTaskListAPIView(ListAPIView):
 
 
 class WarningTaskListAPIView(ListAPIView):
-    queryset = Task.objects.filter(status=Task.Status.TODO, parent_task__isnull=False).exclude(
-        parent_task__status=Task.Status.TODO
-    )
+
     serializer_class = TasksSerializer
     permission_classes = [IsOwner]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = Task.objects.filter(status=Task.Status.TODO, subtasks__status=Task.Status.IN_PROGRESS).distinct()
+        return qs

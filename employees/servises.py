@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from employees.models import Employee
 from tasks.models import Task
@@ -11,7 +11,7 @@ def get_possible_assignees(task_id, user_id):
     user = User.objects.get(id=user_id)
     employees = (
         Employee.objects.filter(is_active=True, header=user)
-        .annotate(active_tasks_count=Count("tasks"))
+        .annotate(active_tasks_count=Count("tasks", filter=Q(tasks__status=Task.Status.IN_PROGRESS)))
         .order_by("active_tasks_count")
     )
     if not employees.exists():

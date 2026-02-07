@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -30,7 +31,11 @@ class EmployeeViewSet(ModelViewSet):
             possible_employees = get_possible_assignees(task_id, user_id=request.user.id)
             return Response(EmployeeSerializer(possible_employees, many=True).data)
         else:
-            queryset = Employee.objects.filter(is_active=True, header=self.request.user)
+            queryset = (
+                Employee.objects.filter(is_active=True, header=self.request.user)
+                .annotate(task_count=Count("tasks"))
+                .order_by("task_count")
+            )
             serializer = EmployeeSerializer(queryset, many=True)
             return Response(serializer.data)
 

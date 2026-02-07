@@ -3,6 +3,7 @@ from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from employees.models import Employee
+from tasks.models import Task
 from tasks.serializers import TasksSerializer
 
 
@@ -38,7 +39,7 @@ class EmployeeSerializer(ModelSerializer):
 
     def get_task_count(self, obj):
         """Количество задач сотрудника"""
-        return obj.tasks.count()
+        return obj.tasks.filter(status=Task.Status.IN_PROGRESS).count()
 
 
 class EmployeeForTask(Serializer):

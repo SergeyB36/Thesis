@@ -38,7 +38,12 @@ class CriticalTasksSerializer(ModelSerializer):
         model = Task
 
         fields = (
-            "id",
+            "title",
             "deadline",
             "fullname",
         )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["string_output"] = f"{instance.itle}, {instance.deadline}, {instance.assignee.fullname}"
+        return data
