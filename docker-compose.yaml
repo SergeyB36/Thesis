@@ -1,0 +1,39 @@
+services:
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/Thesis
+      - static_volume:/Thesis/staticfiles
+      - media_volume:/Thesis/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+  postgres:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      HOST: postgres
+      POSTGRES_DB: Thesis
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6570
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 2
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
